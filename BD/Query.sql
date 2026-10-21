@@ -1,157 +1,88 @@
-create database comercio
-go
-use comercio
-go
+﻿-- ============================================================================
+--  sys_comercio - script de creacion de la base de datos
+--  SQL Server. Uso: abrir en SQL Server Management Studio y ejecutar.
+--  (Si la base ya existe, el script no la vuelve a crear.)
+-- ============================================================================
 
---TABLAS
-create table usuarios(
-id_usuario int primary key,
-usuario nvarchar(15),
-psw int
+USE master
+
+GO
+IF DB_ID('comercio') IS NULL
+    EXEC('CREATE DATABASE [comercio] COLLATE Modern_Spanish_CI_AS')
+
+GO
+USE [comercio]
+
+GO
+-- ============================ TABLAS ============================
+CREATE TABLE [dbo].[usuarios](
+	[id_usuario] [int] NOT NULL,
+	[usuario] [nvarchar](15) NULL,
+	[psw] [int] NULL,
+ CONSTRAINT [PK_usuarios] PRIMARY KEY CLUSTERED ([id_usuario] ASC)
 )
-
-create table clientes(
-id_cliente int primary key,
-razon_social nvarchar(60)
+GO
+CREATE TABLE [dbo].[clientes](
+	[id_cliente] [int] NOT NULL,
+	[razon_social] [nvarchar](60) NULL,
+ CONSTRAINT [PK_clientes] PRIMARY KEY CLUSTERED ([id_cliente] ASC)
 )
-
-create table productos(
-codigo int primary key,
-descripcion nvarchar(60),
-stock int,
-precio decimal(18,2)
+GO
+CREATE TABLE [dbo].[productos](
+	[codigo] [int] NOT NULL,
+	[descripcion] [nvarchar](60) NULL,
+	[stock] [int] NULL,
+	[precio] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_productos] PRIMARY KEY CLUSTERED ([codigo] ASC)
 )
-
-create table ventas(
-id_venta int primary key,
-fecha datetime,
-id_cliente int foreign key references clientes(id_cliente),
-importe decimal(18,2),
-id_usuario int foreign key references usuarios(id_usuario)
+GO
+CREATE TABLE [dbo].[ventas](
+	[id_venta] [int] NOT NULL,
+	[fecha] [datetime] NULL,
+	[id_cliente] [int] NULL,
+	[importe] [decimal](18, 2) NULL,
+	[id_usuario] [int] NULL,
+ CONSTRAINT [PK_ventas] PRIMARY KEY CLUSTERED ([id_venta] ASC)
 )
-
-create table detalle_venta(
-id_venta int foreign key references ventas(id_venta),
-codigo int foreign key references productos(codigo),
-precio decimal(18,2),
-cant int,
-precio_r decimal(18,2),
-primary key(id_venta,codigo)
+GO
+CREATE TABLE [dbo].[detalle_venta](
+	[id_venta] [int] NOT NULL,
+	[codigo] [int] NOT NULL,
+	[precio] [decimal](18, 2) NULL,
+	[cant] [int] NULL,
+	[precio_r] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_detalle_venta] PRIMARY KEY CLUSTERED ([id_venta] ASC, [codigo] ASC)
 )
+GO
+ALTER TABLE [dbo].[ventas] ADD CONSTRAINT [FK_ventas_clientes] FOREIGN KEY ([id_cliente]) REFERENCES [dbo].[clientes] ([id_cliente])
+GO
+ALTER TABLE [dbo].[ventas] ADD CONSTRAINT [FK_ventas_usuarios] FOREIGN KEY ([id_usuario]) REFERENCES [dbo].[usuarios] ([id_usuario])
+GO
+ALTER TABLE [dbo].[detalle_venta] ADD CONSTRAINT [FK_detalle_venta_ventas] FOREIGN KEY ([id_venta]) REFERENCES [dbo].[ventas] ([id_venta])
+GO
+ALTER TABLE [dbo].[detalle_venta] ADD CONSTRAINT [FK_detalle_venta_productos] FOREIGN KEY ([codigo]) REFERENCES [dbo].[productos] ([codigo])
+GO
 
---SPU
---CLIENTES
+-- ==================== USUARIOS DE DEMOSTRACION ====================
+-- (psw en texto plano: es un TP academico, no usar asi en produccion)
+INSERT INTO usuarios (id_usuario, usuario, psw) VALUES (1, 'admin', 123), (2, 'Matias', 456)
 
-create procedure spu_alta_cliente
-@id_cliente int,
-@razon_social nvarchar(60)
-as
-insert into clientes
-values(@id_cliente, @razon_social)
+GO
+-- ================ PROCEDIMIENTOS ALMACENADOS ==================
+CREATE PROCEDURE sp_login
+    @usuario NVARCHAR(50),
+    @psw NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-create procedure spu_baja_cliente
-@id_cliente int
-as
-delete from clientes
-where id_cliente = @id_cliente
+    SELECT id_usuario, usuario
+    FROM usuarios
+    WHERE usuario = @usuario AND psw = @psw;
+END
+GO
 
-create procedure spu_modificar_cliente
-@id_cliente int,
-@razon_social nvarchar(60)
-as
-update clientes set razon_social = @razon_social where id_cliente = @id_cliente
-
-drop procedure spu_mostrar_cliente
-create procedure spu_mostrar_cliente
-as
-select*from clientes
-
---PROCUCTOS
-create procedure spu_alta_productos
-@codigo int,
-@descripcion nvarchar(60),
-@stock int,
-@precio decimal(18,2)
-as
-insert into productos
-values(@codigo, @descripcion, @stock, @precio)
-
-create procedure spu_baja_productos
-@codigo int
-as
-delete from productos where codigo = @codigo
-
-create procedure spu_modificar_productos
-@codigo int,
-@descripcion nvarchar(60),
-@stock int,
-@precio decimal(18,2)
-as
-update productos set
-descripcion = @descripcion,
-stock = @stock,
-precio = @precio
-where codigo = @codigo;
-
-create procedure spu_mostrar_productos
-as
-SELECT * FROM productos
-
-
---VENTAS
-
-create procedure spu_alta_venta
-@id_venta int,
-@fecha datetime,
-@id_cliente int,
-@importe decimal,
-@id_usuario int
-as
-insert into ventas
-values(@id_venta, @fecha, @id_cliente, @importe, @id_usuario)
-
-create procedure spu_modificar_venta
-@id_venta int,
-@fecha datetime,
-@id_cliente int,
-@importe decimal,
-@id_usuario int
-as
-update ventas set
-fecha = @fecha,
-id_cliente = @id_cliente,
-importe = @importe,
-id_usuario = @id_usuario
-where id_venta= @id_venta
-
-create procedure spu_eliminar_venta
-@id_venta int
-as
-delete from ventas where id_venta = @id_venta
-
-create procedure spu_mostrar_venta
-as
-select*from ventas 
-
-drop procedure 
-create procedure spu_id_nueva_venta
-as
-declare @id_venta int;
-SELECT @id_venta = ISNULL(MAX(id_venta), 0) + 1 FROM ventas;
-SELECT @id_venta AS nuevo_id_venta;
-
-
-exec spu_id_nueva_venta 1
-
---DETALLE VENTA
-
-create procedure spu_mostrar_detalle_venta
-@id_venta int
-as
-select descripcion, detalle_venta.precio, cant, precio_r from detalle_venta
-inner join productos on detalle_venta.codigo = productos.codigo
-where id_venta = @id_venta
-
+GO
 create procedure spu_actualizar_venta
 @id_venta int,
 @id_cliente int,
@@ -161,26 +92,42 @@ update ventas
 set id_cliente = @id_cliente,
 importe = @importe
 where id_venta = @id_venta
+GO
 
+GO
+CREATE PROCEDURE spu_alta_cliente
+@id_cliente INT,
+@razon_social NVARCHAR(60)
+AS
+INSERT INTO clientes
+VALUES(@id_cliente, @razon_social)
+GO
 
-create procedure spu_cargar_detalleventa
+GO
+CREATE PROCEDURE spu_alta_productos
+@codigo INT,
+@descripcion NVARCHAR(60),
+@stock INT,
+@precio DECIMAL(18,2)
+AS
+INSERT INTO productos
+VALUES(@codigo, @descripcion, @stock, @precio)
+GO
+
+GO
+create procedure spu_alta_venta
 @id_venta int,
-@codigo int,
-@precio decimal,
-@cant int,
-@precio_r decimal
+@fecha datetime,
+@id_cliente int,
+@importe decimal,
+@id_usuario int
 as
-insert into Detalle_Venta
-values(@id_venta, @codigo, @precio, @cant, @precio_r);
+insert into ventas
+values(@id_venta, @fecha, @id_cliente, @importe, @id_usuario)
+GO
 
-create procedure spu_eliminar_detalleventa
-@id_venta int
-as
-delete from detalle_venta where id_venta = @id_venta
-
---BACKUP
-
-CREATE PROCEDURE spu_backup
+GO
+CREATE PROCEDURE [dbo].[spu_backup]
     @ruta_destino NVARCHAR(500) = NULL
 AS
 BEGIN
@@ -223,35 +170,174 @@ BEGIN
 
     SELECT @archivo AS archivo_backup;
 END
+GO
 
---LOGIN
-drop procedure sp_login
-CREATE PROCEDURE sp_login
-    @usuario NVARCHAR(50),
-    @psw NVARCHAR(50)
+GO
+CREATE PROCEDURE spu_baja_cliente
+@id_cliente INT
+as
+DELETE FROM clientes
+WHERE id_cliente = @id_cliente
+GO
+
+GO
+CREATE PROCEDURE spu_baja_productos
+@codigo INT
+AS
+DELETE FROM productos WHERE codigo = @codigo
+GO
+
+GO
+CREATE PROCEDURE spu_cargar_detalleventa
+@id_venta INT,
+@codigo INT,
+@precio DECIMAL,
+@cant INT,
+@precio_r DECIMAL
+AS
+INSERT INTO Detalle_Venta
+VALUES(@id_venta, @codigo, @precio, @cant, @precio_r);
+GO
+
+GO
+CREATE PROCEDURE spu_eliminar_detalles_por_venta
+    @id_venta INT
 AS
 BEGIN
-    SET NOCOUNT ON;
-
-    SELECT id_usuario, usuario
-    FROM usuarios
-    WHERE usuario = @usuario AND psw = @psw;
+    DELETE FROM detalle_venta
+    WHERE id_venta = @id_venta
 END
+GO
 
+GO
+CREATE PROCEDURE spu_eliminar_detalleventa
+  @id_venta INT,
+    @codigo INT
+AS
+    DELETE FROM detalle_venta
+    WHERE id_venta = @id_venta AND codigo = @codigo
+GO
 
+GO
+CREATE PROCEDURE spu_eliminar_venta
+@id_venta INT
+as
+DELETE FROM ventas where id_venta = @id_venta
+GO
 
-exec sp_login @usuario = 'Matias', @psw = 456;
+GO
+create procedure spu_id_nueva_cliente
+as
+declare @id_cliente int;
+SELECT @id_cliente = ISNULL(MAX(id_cliente), 0) + 1 FROM clientes;
+SELECT @id_cliente AS nuevo_id_cliente;
+GO
 
---TRIGGERS
+GO
+create procedure spu_id_nueva_producto
+as
+declare @codigo int;
+SELECT @codigo = ISNULL(MAX(codigo), 0) + 1 FROM productos;
+SELECT @codigo AS nuevo_id_producto;
+GO
+
+GO
+create procedure spu_id_nueva_venta
+as
+declare @id_venta int;
+SELECT @id_venta = ISNULL(MAX(id_venta), 0) + 1 FROM ventas;
+SELECT @id_venta AS nuevo_id_venta;
+GO
+
+GO
+CREATE PROCEDURE spu_modificar_cliente
+@id_cliente INT,
+@razon_social NVARCHAR(60)
+AS
+UPDATE clientes SET razon_social = @razon_social WHERE id_cliente = @id_cliente
+GO
+
+GO
+CREATE PROCEDURE spu_modificar_productos
+@codigo INT,
+@descripcion NVARCHAR(60),
+@stock INT,
+@precio DECIMAL(18,2)
+as
+UPDATE productos set
+descripcion = @descripcion,
+stock = @stock,
+precio = @precio
+WHERE codigo = @codigo;
+GO
+
+GO
+CREATE PROCEDURE spu_modificar_venta
+@id_venta INT,
+@fecha DATETIME,
+@id_cliente INT,
+@importe DECIMAL,
+@id_usuario INT
+as
+UPDATE ventas set
+fecha = @fecha,
+id_cliente = @id_cliente,
+importe = @importe,
+id_usuario = @id_usuario
+where id_venta= @id_venta
+GO
+
+GO
+create procedure spu_mostrar_cliente
+as
+select*from clientes
+GO
+
+GO
+CREATE procedure [dbo].[spu_mostrar_detalle_venta]
+@id_venta INT
+AS
+BEGIN
+    SELECT detalle_venta.codigo, productos.descripcion, detalle_venta.precio, cant, precio_r
+    FROM detalle_venta
+    INNER JOIN productos ON detalle_venta.codigo = productos.codigo WHERE id_venta = @id_venta
+END
+GO
+
+GO
+CREATE PROCEDURE spu_mostrar_productos
+AS
+BEGIN
+    SELECT * FROM productos
+END
+GO
+
+GO
+create procedure spu_mostrar_venta
+as
+select*from ventas
+GO
+
+GO
+-- =========================== TRIGGERS ===========================
 create trigger baja_stock on detalle_venta
 for insert
 as
-update productos set stock = stock - (select cant from inserted)
-where codigo = (select codigo from inserted)
+ UPDATE p
+    SET p.stock = p.stock - i.cant
+    FROM productos p
+    INNER JOIN inserted i ON p.codigo = i.codigo;
+GO
 
-
+GO
 create trigger sube_stock on detalle_venta
 for delete
 as
-update productos set stock = stock + (select cant from deleted)
-where codigo = (select codigo from deleted)
+ UPDATE p
+    SET p.stock = p.stock + d.cant
+    FROM productos p
+    INNER JOIN deleted d ON p.codigo = d.codigo;
+GO
+
+GO
+-- ==================== FIN DEL SCRIPT ====================
