@@ -13,6 +13,8 @@ namespace sys_comercio
 {
     public partial class frmLogin : Form
     {
+        public string UsuarioLogueado { get; private set; }
+        public int IdUsuarioLogueado { get; private set; }
         public frmLogin()
         {
             InitializeComponent();
@@ -30,8 +32,6 @@ namespace sys_comercio
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-
-
             Conexion c = new Conexion();
             SqlConnection conn = c.Connect();
 
@@ -59,15 +59,13 @@ namespace sys_comercio
                     {
                         if (dr.Read())
                         {
-                            int idUsuario = Convert.ToInt32(dr["id_usuario"]);
-                            string nombreUsuario = dr["usuario"].ToString();
+                            IdUsuarioLogueado = Convert.ToInt32(dr["id_usuario"]);
+                            UsuarioLogueado = dr["usuario"].ToString();
 
-                            MessageBox.Show("Bienvenido " + nombreUsuario);
+                            MessageBox.Show("Bienvenido " + UsuarioLogueado);
 
                             this.DialogResult = DialogResult.OK;
-                            frmMain frm = new frmMain(nombreUsuario, idUsuario); 
-                            frm.ShowDialog();
-                            Close();
+                            this.Close();
                         }
                         else
                         {

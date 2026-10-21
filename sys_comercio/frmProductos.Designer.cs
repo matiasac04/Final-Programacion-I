@@ -62,10 +62,12 @@
             this.dgvProductos.Name = "dgvProductos";
             this.dgvProductos.ReadOnly = true;
             this.dgvProductos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProductos.Size = new System.Drawing.Size(1063, 272);
+            this.dgvProductos.Size = new System.Drawing.Size(1063, 353);
             this.dgvProductos.TabIndex = 1;
             this.dgvProductos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductos_Click);
             this.dgvProductos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductos_CellDoubleClick);
+            this.dgvProductos.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProductos_CellFormatting);
+            this.dgvProductos.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvProductos_KeyDown);
             // 
             // panel1
             // 
@@ -73,7 +75,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1063, 272);
+            this.panel1.Size = new System.Drawing.Size(1063, 353);
             this.panel1.TabIndex = 2;
             // 
             // btnDatos
@@ -95,7 +97,7 @@
             this.lblCodigo.Name = "lblCodigo";
             this.lblCodigo.Size = new System.Drawing.Size(77, 24);
             this.lblCodigo.TabIndex = 21;
-            this.lblCodigo.Text = "Codigo";
+            this.lblCodigo.Text = "Código";
             // 
             // lblDescripcion
             // 
@@ -105,7 +107,7 @@
             this.lblDescripcion.Name = "lblDescripcion";
             this.lblDescripcion.Size = new System.Drawing.Size(121, 24);
             this.lblDescripcion.TabIndex = 20;
-            this.lblDescripcion.Text = "Descripcion";
+            this.lblDescripcion.Text = "Descripción";
             // 
             // txtDescripcion
             // 
@@ -196,7 +198,7 @@
             // 
             this.lblBuscar.AutoSize = true;
             this.lblBuscar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuscar.Location = new System.Drawing.Point(356, 312);
+            this.lblBuscar.Location = new System.Drawing.Point(351, 379);
             this.lblBuscar.Name = "lblBuscar";
             this.lblBuscar.Size = new System.Drawing.Size(80, 24);
             this.lblBuscar.TabIndex = 49;
@@ -205,7 +207,7 @@
             // txtBuscar
             // 
             this.txtBuscar.BackColor = System.Drawing.SystemColors.Info;
-            this.txtBuscar.Location = new System.Drawing.Point(445, 317);
+            this.txtBuscar.Location = new System.Drawing.Point(440, 384);
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(348, 20);
             this.txtBuscar.TabIndex = 48;

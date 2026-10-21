@@ -1,4 +1,4 @@
-# sys_comercio
+﻿# sys_comercio
 
 Sistema de comercio en **C# WinForms (.NET Framework 4.8)** con **SQL Server** y la librería
 de interfaz **Guna.UI2**.
@@ -64,7 +64,7 @@ Si no encuentra ninguna, muestra un aviso indicando que falta la configuración.
 Además, en el mismo `App.config.local` se puede indicar dónde se guardan los respaldos:
 
 ```xml
-<add key="CarpetaBackup" value="C:\Final\Backup\" />
+<add key="CarpetaBackup" value="E:\Facultad\Final\Backup\" />
 ```
 
 Si se deja vacía, los `.bak` van a la carpeta de backup por defecto de la instancia de

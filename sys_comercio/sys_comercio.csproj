@@ -132,8 +132,8 @@
     <None Include="App.config" />
     <!--
       App.config.local lleva la cadena de conexión con la clave de cada máquina:
-      no se versiona (está en el .gitignore) pero se copia a la carpeta de salida
-      para que la app la encuentre al ejecutar.
+      no se versiona pero se copia a la carpeta de salida para que la app la
+      encuentre al ejecutar.
     -->
     <None Include="App.config.local" Condition="Exists('App.config.local')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

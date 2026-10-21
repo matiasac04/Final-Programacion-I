@@ -14,7 +14,8 @@ namespace sys_comercio
     public partial class frmClientes : Form
     {
         DataTable clientesTable;
-        public int IdClienteSeleccionado { get; private set; }
+        public int IdClienteSeleccionado { get; set; }
+        int idActual;
         string flag = "No seleccionado";
         public frmClientes()
         {
@@ -25,7 +26,7 @@ namespace sys_comercio
             da.Fill(clientesTable);
             dgvClientes.DataSource = clientesTable;
             dgvClientes.Columns[0].HeaderText = "ID";
-            dgvClientes.Columns[1].HeaderText = "Razon social";
+            dgvClientes.Columns[1].HeaderText = "Razón social";
         }
 
         private void frmClientes_Load(object sender, EventArgs e)
@@ -75,13 +76,37 @@ namespace sys_comercio
 
                 txtId.Text = fila.Cells["id_cliente"].Value.ToString();
                 txtRazonSocial.Text = fila.Cells["razon_social"].Value.ToString();
+
             }
         }
+        private void dgvClientes_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (dgvClientes.CurrentRow == null) return;
+
+                IdClienteSeleccionado = Convert.ToInt32(dgvClientes.CurrentRow.Cells["id_cliente"].Value);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+
+                e.Handled = true; 
+            }
+        }
+
 
         private void picAgregar_Click(object sender, EventArgs e)
         {
             flag = "Agregar";
             btnDatos.Text = "Agregar";
+
+            txtId.Text = idActual.ToString();
+            using (SqlConnection conn = new Conexion().Connect())
+            {
+                SqlCommand cmd = new SqlCommand("spu_id_nueva_cliente", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                object result = cmd.ExecuteScalar();
+                txtId.Text = result.ToString();
+            }
         }
 
         private void picActualizar_Click(object sender, EventArgs e)
@@ -164,7 +189,7 @@ namespace sys_comercio
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al eliminar el cliente: " + ex.Message);
+                    MessageBox.Show("No se puede eliminar el cliente porque tiene ventas asociadas.", "Operación no permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else
@@ -208,16 +233,6 @@ namespace sys_comercio
             }
         }
 
-        private void dgvClientes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                IdClienteSeleccionado = Convert.ToInt32(dgvClientes.Rows[e.RowIndex].Cells["id_cliente"].Value);
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-        }
-
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
             if (dgvClientes.DataSource != null)
@@ -232,9 +247,11 @@ namespace sys_comercio
                         $"OR Convert([id_cliente], 'System.String') LIKE '%{filtro}%'";
                 }
             }
-
         }
+
+
     }
-}
+    }
+
 
 

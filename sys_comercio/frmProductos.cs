@@ -15,21 +15,18 @@ namespace sys_comercio
     {
         DataTable productosTable;
         public bool ModoSeleccion { get; set; } = false;
-        public decimal TotalSeleccionado { get; private set; }
+        public int StockSeleccionado { get; private set; }
+        public int CodigoSeleccionado { get; private set; }
+        public string ProductoSeleccionado { get; private set; }
+        public decimal PrecioSeleccionado { get; private set; }
+
+        int idCodigoActual;
+
 
         string flag = "No seleccionado";
         public frmProductos()
         {
             InitializeComponent();
-            var da = new SqlDataAdapter("spu_mostrar_productos", new Conexion().Connect());
-            da.SelectCommand.CommandType = CommandType.StoredProcedure;
-            productosTable = new DataTable();
-            da.Fill(productosTable);
-            dgvProductos.DataSource = productosTable;
-            dgvProductos.Columns[0].HeaderText = "Codigo";
-            dgvProductos.Columns[1].HeaderText = "Descripcion";
-            dgvProductos.Columns[2].HeaderText = "Stock";
-            dgvProductos.Columns[3].HeaderText = "Precio";
         }
 
         private void frmProductos_Load(object sender, EventArgs e)
@@ -101,6 +98,14 @@ namespace sys_comercio
         {
             flag = "Agregar";
             btnDatos.Text = "Agregar";
+            txtCodigo.Text = idCodigoActual.ToString();
+            using (SqlConnection conn = new Conexion().Connect())
+            {
+                SqlCommand cmd = new SqlCommand("spu_id_nueva_producto", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                object result = cmd.ExecuteScalar();
+                txtCodigo.Text = result.ToString();
+            }
         }
 
         private void picActualizar_Click(object sender, EventArgs e)
@@ -131,6 +136,14 @@ namespace sys_comercio
                 }
                 try
                 {
+                    decimal precio;
+
+                    if (!decimal.TryParse(txtPrecio.Text, out precio))
+                    {
+                        MessageBox.Show("Precio inválido.");
+                        return;
+                    }
+
                     using (SqlCommand cmd = new SqlCommand("spu_alta_productos", new Conexion().Connect()))
                     {
 
@@ -138,7 +151,7 @@ namespace sys_comercio
                         cmd.Parameters.AddWithValue("@codigo", txtCodigo.Text.Trim());
                         cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
                         cmd.Parameters.AddWithValue("@stock", txtStock.Text.Trim());
-                        cmd.Parameters.AddWithValue("@precio", txtPrecio.Text.Trim());
+                        cmd.Parameters.Add("@precio", SqlDbType.Decimal).Value = precio;
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Producto agregado exitosamente.");
                         var da = new SqlDataAdapter("spu_mostrar_productos", new Conexion().Connect());
@@ -184,7 +197,11 @@ namespace sys_comercio
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al eliminar el producto: " + ex.Message);
+                    MessageBox.Show("No se puede eliminar el producto porque tiene ventas asociadas.",
+                    "Operación no permitida",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+);
                 }
             }
             else
@@ -198,14 +215,20 @@ namespace sys_comercio
 
                 try
                 {
+                    decimal precio;
 
+                    if (!decimal.TryParse(txtPrecio.Text, out precio))
+                    {
+                        MessageBox.Show("Precio inválido.");
+                        return;
+                    }
                     using (SqlCommand cmd = new SqlCommand("spu_modificar_productos", new Conexion().Connect()))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@codigo", Convert.ToInt32(txtCodigo.Text.Trim()));
                         cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
                         cmd.Parameters.AddWithValue("@stock", Convert.ToInt32(txtStock.Text.Trim()));
-                        cmd.Parameters.AddWithValue("@precio", txtPrecio.Text.Trim());
+                        cmd.Parameters.Add("@precio", SqlDbType.Decimal).Value = precio;
 
 
                         int filas = cmd.ExecuteNonQuery();
@@ -245,7 +268,7 @@ namespace sys_comercio
                         total += Convert.ToDecimal(fila.Cells["precio"].Value);
                 }
 
-                TotalSeleccionado = total;
+                //TotalSeleccionado = total;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -266,5 +289,47 @@ namespace sys_comercio
             }
         }
 
+        private void dgvProductos_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (dgvProductos.CurrentRow == null) return;
+
+                CodigoSeleccionado = Convert.ToInt32(dgvProductos.CurrentRow.Cells["Codigo"].Value);
+
+                ProductoSeleccionado = dgvProductos.CurrentRow.Cells["Descripcion"].Value.ToString();
+
+                PrecioSeleccionado = Convert.ToDecimal(dgvProductos.CurrentRow.Cells["Precio"].Value);
+
+                StockSeleccionado = Convert.ToInt32(dgvProductos.CurrentRow.Cells["Stock"].Value);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+
+                e.Handled = true;
+            }
+        }
+
+        private void dgvProductos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvProductos.Columns[e.ColumnIndex].Name == "stock")
+            {
+                if (e.Value != null && int.TryParse(e.Value.ToString(), out int stock))
+                {
+                    if (stock == 0)
+                    {
+                        dgvProductos.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.DarkRed;
+                        dgvProductos.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        // vuelve al color normal
+                        dgvProductos.Rows[e.RowIndex].DefaultCellStyle.BackColor =
+                            Color.FromArgb(37, 45, 55);
+                        dgvProductos.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.WhiteSmoke;
+                    }
+                }
+            }
+        }
     }
 }

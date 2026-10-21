@@ -44,9 +44,12 @@
             this.picCerrarSesion = new System.Windows.Forms.PictureBox();
             this.lblEstado = new System.Windows.Forms.Label();
             this.pnlMenu = new System.Windows.Forms.Panel();
-            this.btnBackup = new System.Windows.Forms.Button();
-            this.picBackUp = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnCerrar = new System.Windows.Forms.Button();
             this.pnlBackup = new System.Windows.Forms.Panel();
+            this.picBackUp = new System.Windows.Forms.PictureBox();
+            this.btnBackup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picProductos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picVentas)).BeginInit();
@@ -55,6 +58,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picIzo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCerrarSesion)).BeginInit();
             this.pnlMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBackUp)).BeginInit();
             this.SuspendLayout();
             // 
@@ -232,6 +236,9 @@
             // pnlMenu
             // 
             this.pnlMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
+            this.pnlMenu.Controls.Add(this.panel1);
+            this.pnlMenu.Controls.Add(this.pictureBox1);
+            this.pnlMenu.Controls.Add(this.btnCerrar);
             this.pnlMenu.Controls.Add(this.pnlBackup);
             this.pnlMenu.Controls.Add(this.picBackUp);
             this.pnlMenu.Controls.Add(this.btnBackup);
@@ -254,6 +261,64 @@
             this.pnlMenu.Size = new System.Drawing.Size(220, 688);
             this.pnlMenu.TabIndex = 1;
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panel1.Location = new System.Drawing.Point(0, 425);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(10, 45);
+            this.panel1.TabIndex = 21;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(28, 425);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(50, 45);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 23;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // btnCerrar
+            // 
+            this.btnCerrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
+            this.btnCerrar.FlatAppearance.BorderSize = 0;
+            this.btnCerrar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.btnCerrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCerrar.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrar.ForeColor = System.Drawing.Color.LightGray;
+            this.btnCerrar.Location = new System.Drawing.Point(0, 425);
+            this.btnCerrar.Name = "btnCerrar";
+            this.btnCerrar.Size = new System.Drawing.Size(220, 45);
+            this.btnCerrar.TabIndex = 22;
+            this.btnCerrar.Text = "CERRAR";
+            this.btnCerrar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCerrar.UseVisualStyleBackColor = false;
+            this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
+            // 
+            // pnlBackup
+            // 
+            this.pnlBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.pnlBackup.Location = new System.Drawing.Point(0, 374);
+            this.pnlBackup.Name = "pnlBackup";
+            this.pnlBackup.Size = new System.Drawing.Size(10, 45);
+            this.pnlBackup.TabIndex = 16;
+            // 
+            // picBackUp
+            // 
+            this.picBackUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
+            this.picBackUp.Image = ((System.Drawing.Image)(resources.GetObject("picBackUp.Image")));
+            this.picBackUp.Location = new System.Drawing.Point(28, 374);
+            this.picBackUp.Name = "picBackUp";
+            this.picBackUp.Size = new System.Drawing.Size(50, 45);
+            this.picBackUp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBackUp.TabIndex = 20;
+            this.picBackUp.TabStop = false;
+            this.picBackUp.Click += new System.EventHandler(this.picBackUp_Click);
+            // 
             // btnBackup
             // 
             this.btnBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
@@ -271,26 +336,6 @@
             this.btnBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnBackup.UseVisualStyleBackColor = false;
             this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
-            // 
-            // picBackUp
-            // 
-            this.picBackUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
-            this.picBackUp.Image = ((System.Drawing.Image)(resources.GetObject("picBackUp.Image")));
-            this.picBackUp.Location = new System.Drawing.Point(28, 374);
-            this.picBackUp.Name = "picBackUp";
-            this.picBackUp.Size = new System.Drawing.Size(50, 45);
-            this.picBackUp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBackUp.TabIndex = 20;
-            this.picBackUp.TabStop = false;
-            this.picBackUp.Click += new System.EventHandler(this.picBackUp_Click);
-            // 
-            // pnlBackup
-            // 
-            this.pnlBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.pnlBackup.Location = new System.Drawing.Point(0, 374);
-            this.pnlBackup.Name = "pnlBackup";
-            this.pnlBackup.Size = new System.Drawing.Size(10, 45);
-            this.pnlBackup.TabIndex = 16;
             // 
             // frmMain
             // 
@@ -315,6 +360,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picCerrarSesion)).EndInit();
             this.pnlMenu.ResumeLayout(false);
             this.pnlMenu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBackUp)).EndInit();
             this.ResumeLayout(false);
 
@@ -340,5 +386,8 @@
         private System.Windows.Forms.Panel pnlBackup;
         private System.Windows.Forms.PictureBox picBackUp;
         private System.Windows.Forms.Button btnBackup;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnCerrar;
     }
 }

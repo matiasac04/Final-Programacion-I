@@ -491,7 +491,7 @@
   <data name="picLupaIdCliente.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAAB9hJREFUeF7tnc+rFlUYxzXwx0oIw36AgaS0apMrISN/1V8gQa4MRRe50FYpRO2k
+        DAAACwwBP0AiyAAAB9hJREFUeF7tnc+rFlUYxzXwx0oIw36AgaS0apMrISN/1V8gQa4MRRe50FYpRO2k
         pUKBrhMsQsmNq8hlbUppIbRpk/SDFlmWZWWfj/e54L33fWfOzDs/ztw7H/jCZeac8zznvO995pxnzsy7
         qkvu37+/Fm1HB9FpdAldR7fQHXQv5N8e85xlLGsd666N5kZSYMA2o2PoMvoJzYpt2JZtbg4zIw/DwKxH
         r6Gr6C/UFratDW2tD/MrFwZhAzqBvkf/oa7Qlja1vSHcWTnQ6TXoOPoB9c2PyA9iZVwr6OgL6CvU5Tc+
@@ -528,7 +528,7 @@
         YII=
 </value>
   </data>
-  <data name="picLupaImporte.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="picLupaCodigo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
         DAAACwwBP0AiyAAAB9hJREFUeF7tnc+rFlUYxzXwx0oIw36AgaS0apMrISN/1V8gQa4MRRe50FYpRO2k
@@ -568,6 +568,9 @@
         YII=
 </value>
   </data>
+  <metadata name="timerFecha.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEA3wAAAAEAIAAomAMAFgAAACgAAADfAAAAAAIAAAEAIAAAAAAAAHwDABILAAASCwAAAAAAAAAA

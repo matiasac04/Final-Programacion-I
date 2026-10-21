@@ -57,10 +57,10 @@
             this.dgvClientes.Location = new System.Drawing.Point(0, 0);
             this.dgvClientes.Name = "dgvClientes";
             this.dgvClientes.ReadOnly = true;
-            this.dgvClientes.Size = new System.Drawing.Size(1063, 235);
+            this.dgvClientes.Size = new System.Drawing.Size(1063, 362);
             this.dgvClientes.TabIndex = 0;
             this.dgvClientes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClientes_CellClick);
-            this.dgvClientes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClientes_CellDoubleClick);
+            this.dgvClientes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvClientes_KeyDown);
             // 
             // panel1
             // 
@@ -68,13 +68,13 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1063, 235);
+            this.panel1.Size = new System.Drawing.Size(1063, 362);
             this.panel1.TabIndex = 1;
             // 
             // picAgregar
             // 
             this.picAgregar.Image = ((System.Drawing.Image)(resources.GetObject("picAgregar.Image")));
-            this.picAgregar.Location = new System.Drawing.Point(935, 298);
+            this.picAgregar.Location = new System.Drawing.Point(932, 426);
             this.picAgregar.Name = "picAgregar";
             this.picAgregar.Size = new System.Drawing.Size(69, 64);
             this.picAgregar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -85,7 +85,7 @@
             // picEliminar
             // 
             this.picEliminar.Image = ((System.Drawing.Image)(resources.GetObject("picEliminar.Image")));
-            this.picEliminar.Location = new System.Drawing.Point(935, 438);
+            this.picEliminar.Location = new System.Drawing.Point(932, 566);
             this.picEliminar.Name = "picEliminar";
             this.picEliminar.Size = new System.Drawing.Size(69, 64);
             this.picEliminar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -96,7 +96,7 @@
             // picActualizar
             // 
             this.picActualizar.Image = ((System.Drawing.Image)(resources.GetObject("picActualizar.Image")));
-            this.picActualizar.Location = new System.Drawing.Point(935, 368);
+            this.picActualizar.Location = new System.Drawing.Point(932, 496);
             this.picActualizar.Name = "picActualizar";
             this.picActualizar.Size = new System.Drawing.Size(69, 64);
             this.picActualizar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -107,7 +107,7 @@
             // txtId
             // 
             this.txtId.BackColor = System.Drawing.SystemColors.Info;
-            this.txtId.Location = new System.Drawing.Point(387, 386);
+            this.txtId.Location = new System.Drawing.Point(384, 514);
             this.txtId.Name = "txtId";
             this.txtId.Size = new System.Drawing.Size(348, 20);
             this.txtId.TabIndex = 13;
@@ -115,7 +115,7 @@
             // txtRazonSocial
             // 
             this.txtRazonSocial.BackColor = System.Drawing.SystemColors.Info;
-            this.txtRazonSocial.Location = new System.Drawing.Point(387, 412);
+            this.txtRazonSocial.Location = new System.Drawing.Point(384, 540);
             this.txtRazonSocial.Name = "txtRazonSocial";
             this.txtRazonSocial.Size = new System.Drawing.Size(348, 20);
             this.txtRazonSocial.TabIndex = 14;
@@ -124,17 +124,17 @@
             // 
             this.lblRazonSocial.AutoSize = true;
             this.lblRazonSocial.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRazonSocial.Location = new System.Drawing.Point(241, 407);
+            this.lblRazonSocial.Location = new System.Drawing.Point(238, 535);
             this.lblRazonSocial.Name = "lblRazonSocial";
             this.lblRazonSocial.Size = new System.Drawing.Size(129, 24);
             this.lblRazonSocial.TabIndex = 15;
-            this.lblRazonSocial.Text = "Razon social";
+            this.lblRazonSocial.Text = "Razón social";
             // 
             // lblId
             // 
             this.lblId.AutoSize = true;
             this.lblId.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblId.Location = new System.Drawing.Point(241, 381);
+            this.lblId.Location = new System.Drawing.Point(238, 509);
             this.lblId.Name = "lblId";
             this.lblId.Size = new System.Drawing.Size(29, 24);
             this.lblId.TabIndex = 16;
@@ -143,7 +143,7 @@
             // btnDatos
             // 
             this.btnDatos.BackColor = System.Drawing.SystemColors.Info;
-            this.btnDatos.Location = new System.Drawing.Point(466, 452);
+            this.btnDatos.Location = new System.Drawing.Point(463, 580);
             this.btnDatos.Name = "btnDatos";
             this.btnDatos.Size = new System.Drawing.Size(185, 23);
             this.btnDatos.TabIndex = 17;
@@ -155,15 +155,16 @@
             // 
             this.lblBuscar.AutoSize = true;
             this.lblBuscar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuscar.Location = new System.Drawing.Point(332, 284);
+            this.lblBuscar.Location = new System.Drawing.Point(329, 412);
             this.lblBuscar.Name = "lblBuscar";
             this.lblBuscar.Size = new System.Drawing.Size(80, 24);
             this.lblBuscar.TabIndex = 47;
-            this.lblBuscar.Text = "Buscar:";            // 
+            this.lblBuscar.Text = "Buscar:";
+            // 
             // txtBuscar
             // 
             this.txtBuscar.BackColor = System.Drawing.SystemColors.Info;
-            this.txtBuscar.Location = new System.Drawing.Point(421, 289);
+            this.txtBuscar.Location = new System.Drawing.Point(418, 417);
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(348, 20);
             this.txtBuscar.TabIndex = 46;
@@ -174,7 +175,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
-            this.ClientSize = new System.Drawing.Size(1063, 514);
+            this.ClientSize = new System.Drawing.Size(1063, 707);
             this.Controls.Add(this.lblBuscar);
             this.Controls.Add(this.btnDatos);
             this.Controls.Add(this.txtBuscar);

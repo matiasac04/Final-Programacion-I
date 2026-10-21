@@ -47,7 +47,11 @@ namespace sys_comercio
             frmClientes.Dock = DockStyle.Fill;
             frmClientes.WindowState = FormWindowState.Normal;
             frmClientes.Show();
-
+            btnClientes.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -59,6 +63,11 @@ namespace sys_comercio
             frmClientes.Dock = DockStyle.Fill;
             frmClientes.WindowState = FormWindowState.Normal;
             frmClientes.Show();
+            btnClientes.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         private void btnProductos_Click(object sender, EventArgs e)
@@ -70,6 +79,11 @@ namespace sys_comercio
             frmProductos.Dock = DockStyle.Fill;
             frmProductos.WindowState = FormWindowState.Normal;
             frmProductos.Show();
+            btnProductos.BackColor = Color.FromArgb(0, 80, 200);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
@@ -92,6 +106,11 @@ namespace sys_comercio
             frmVentas.Dock = DockStyle.Fill;
             frmVentas.WindowState = FormWindowState.Normal;
             frmVentas.Show();
+            btnVentas.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -103,6 +122,11 @@ namespace sys_comercio
             frmVentas.Dock = DockStyle.Fill;
             frmVentas.WindowState = FormWindowState.Normal;
             frmVentas.Show();
+            btnVentas.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         private void pictureBox5_Click(object sender, EventArgs e)
@@ -113,11 +137,21 @@ namespace sys_comercio
         private void btnBackup_Click(object sender, EventArgs e)
         {
             RealizarBackup();
+            btnBackup.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         private void picBackUp_Click(object sender, EventArgs e)
         {
             RealizarBackup();
+            btnBackup.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnCerrar.BackColor = Color.FromArgb(26, 32, 40);
         }
 
         // Pide confirmación y hace el respaldo de la base (spu_backup).
@@ -177,5 +211,26 @@ namespace sys_comercio
                 );
             }
         }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+            btnCerrar.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+            btnCerrar.BackColor = Color.FromArgb(0, 80, 200);
+            btnProductos.BackColor = Color.FromArgb(26, 32, 40);
+            btnVentas.BackColor = Color.FromArgb(26, 32, 40);
+            btnClientes.BackColor = Color.FromArgb(26, 32, 40);
+            btnBackup.BackColor = Color.FromArgb(26, 32, 40);
+        }
+
     }
 }
