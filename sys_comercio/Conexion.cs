@@ -57,6 +57,14 @@ namespace sys_comercio
             }
         }
 
+        // Carpeta donde se guardan los respaldos (clave "CarpetaBackup").
+        // Vacío o ausente = la carpeta de backup por defecto de la instancia de SQL Server.
+        public static string ObtenerCarpetaBackup()
+        {
+            string carpeta = ConfigurationManager.AppSettings["CarpetaBackup"];
+            return string.IsNullOrWhiteSpace(carpeta) ? null : carpeta.Trim();
+        }
+
         public SqlConnection Connect()
         {
             string cadena = ObtenerCadenaConexion();

@@ -181,11 +181,48 @@ delete from detalle_venta where id_venta = @id_venta
 --BACKUP
 
 CREATE PROCEDURE spu_backup
+    @ruta_destino NVARCHAR(500) = NULL
 AS
-DECLARE @MyFileName VARCHAR(1000)
-SELECT @MyFileName = (SELECT 'C:\Final\Backup\'+ CONVERT (VARCHAR(500),GETDATE(),112)+'.bak') 
-BACKUP DATABASE [Parcial2025]
-TO DISK = @MyFileName
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Carpeta destino: la que se pasa por parametro o, si no se pasa,
+    -- la carpeta de backup por defecto de la instancia.
+    DECLARE @ruta NVARCHAR(500) =
+        ISNULL(NULLIF(LTRIM(RTRIM(@ruta_destino)), ''),
+               CONVERT(NVARCHAR(500), SERVERPROPERTY('InstanceDefaultBackupPath')));
+
+    IF @ruta IS NULL
+    BEGIN
+        RAISERROR('No se pudo determinar la carpeta de destino: pasá @ruta_destino o configurá InstanceDefaultBackupPath en la instancia.', 16, 1);
+        RETURN;
+    END
+
+    IF RIGHT(@ruta, 1) <> '\'
+        SET @ruta = @ruta + '\';
+
+    -- yyyyMMdd.bak, sin pisar un respaldo anterior del mismo dia.
+    DECLARE @archivo NVARCHAR(500) = @ruta + CONVERT(NVARCHAR(8), GETDATE(), 112) + '.bak';
+    DECLARE @existe INT;
+    EXEC master.dbo.xp_fileexist @archivo, @existe OUTPUT;
+
+    DECLARE @correlativo INT = 1;
+    WHILE @existe = 1
+    BEGIN
+        SET @archivo = @ruta + CONVERT(NVARCHAR(8), GETDATE(), 112) + '_' + CAST(@correlativo AS NVARCHAR(3)) + '.bak';
+        EXEC master.dbo.xp_fileexist @archivo, @existe OUTPUT;
+        SET @correlativo = @correlativo + 1;
+    END
+
+    -- BACKUP DATABASE necesita ir en su propio lote: por eso se ejecuta con SQL dinamico.
+    -- Se respaldo DB_NAME() (la base desde la que se llama), no un nombre fijo.
+    DECLARE @sql NVARCHAR(MAX) =
+        N'BACKUP DATABASE ' + QUOTENAME(DB_NAME()) + N' TO DISK = @archivo WITH INIT;';
+
+    EXEC sys.sp_executesql @sql, N'@archivo NVARCHAR(500)', @archivo = @archivo;
+
+    SELECT @archivo AS archivo_backup;
+END
 
 --LOGIN
 drop procedure sp_login

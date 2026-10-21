@@ -13,7 +13,8 @@ stock automáticamente según se cargan o eliminan líneas de venta.
 - Windows 10/11
 - Visual Studio 2022 (o Build Tools) con el *developer pack* de **.NET Framework 4.8**
 - **SQL Server Express** (instancia `SQLEXPRESS`)
-- **NuGet** para restaurar el paquete `Guna.UI2.WinForms`
+
+> No hace falta instalar ningún paquete NuGet: el proyecto no usa librerías externas.
 
 ---
 
@@ -32,16 +33,7 @@ BD/comercio_log.ldf          Log de la base adjunta
 
 ## Puesta en marcha
 
-### 1. Restaurar los paquetes NuGet
-
-Desde Visual Studio: **Right click sobre la solución → Restore NuGet Packages**.
-O por consola:
-
-```bash
-nuget restore sys_comercio.sln
-```
-
-### 2. Crear la base de datos
+### 1. Crear la base de datos
 
 Abrí **SQL Server Management Studio** y corré el script `BD/Query.sql`. Crea la base
 `comercio` con sus tablas, procedimientos almacenados y triggers.
@@ -49,7 +41,7 @@ Abrí **SQL Server Management Studio** y corré el script `BD/Query.sql`. Crea l
 > También podés usar los archivos `BD/comercio.mdf` y `BD/comercio_log.ldf` (base adjunta)
 > en lugar de correr el script.
 
-### 3. Configurar la conexión a la base
+### 2. Configurar la conexión a la base
 
 La cadena de conexión **no está en el repositorio**. Para configurarla en tu máquina:
 
@@ -68,6 +60,15 @@ La app busca la cadena en este orden:
 2. `App.config` (versionado) → placeholder sin clave, por si se corre sin configurar.
 
 Si no encuentra ninguna, muestra un aviso indicando que falta la configuración.
+
+Además, en el mismo `App.config.local` se puede indicar dónde se guardan los respaldos:
+
+```xml
+<add key="CarpetaBackup" value="C:\Final\Backup\" />
+```
+
+Si se deja vacía, los `.bak` van a la carpeta de backup por defecto de la instancia de
+SQL Server. La app muestra la ruta del archivo generado al terminar el respaldo.
 
 ### 4. Compilar y ejecutar
 
@@ -105,5 +106,6 @@ Triggers: `baja_stock` (descuenta stock al insertar una línea) y `sube_stock`
 
 - La contraseña de los usuarios se guarda en texto plano en la tabla `usuarios`
   (es un TP académico, no usar así en producción).
-- `spu_backup` tiene rutas fijas (`C:\Final\Backup\`) y referse a la base `Parcial2025`:
-  ajustarlas si se usa.
+- `spu_backup` respalda la base desde la que se llama (`comercio`) y devuelve la ruta
+  del `.bak` generado. El nombre es `yyyyMMdd.bak`; si ya existe, se le agrega un
+  correlativo (`_1`, `_2`, ...) para no pisarlo.

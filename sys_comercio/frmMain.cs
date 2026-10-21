@@ -112,69 +112,56 @@ namespace sys_comercio
 
         private void btnBackup_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(
-        "¿Está seguro de que desea realizar un backup?",
-        "Confirmar Backup",
-        MessageBoxButtons.YesNo,
-        MessageBoxIcon.Question
-    );
-
-            if (result == DialogResult.No)
-                return; 
-
-            try
-            {
-                using (SqlConnection conn = new Conexion().Connect())
-                {
-                    using (SqlCommand cmd = new SqlCommand("spu_backup", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show(
-                    "Backup realizado correctamente.",
-                    "Éxito",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Error al realizar el backup: " + ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
+            RealizarBackup();
         }
 
         private void picBackUp_Click(object sender, EventArgs e)
         {
+            RealizarBackup();
+        }
+
+        // Pide confirmación y hace el respaldo de la base (spu_backup).
+        // La carpeta de destino sale de la configuración (clave "CarpetaBackup");
+        // si está vacía se usa la carpeta de backup por defecto de la instancia.
+        // Al terminar muestra dónde quedó el archivo .bak.
+        private void RealizarBackup()
+        {
             DialogResult result = MessageBox.Show(
-            "¿Está seguro de que desea realizar un backup?",
-            "Confirmar Backup",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question);
+                "¿Está seguro de que desea realizar un backup?",
+                "Confirmar Backup",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
             if (result == DialogResult.No)
                 return;
 
             try
             {
+                string archivo;
+
                 using (SqlConnection conn = new Conexion().Connect())
                 {
+                    if (conn == null)
+                        return;
+
                     using (SqlCommand cmd = new SqlCommand("spu_backup", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.ExecuteNonQuery();
+
+                        string carpeta = Conexion.ObtenerCarpetaBackup();
+                        if (!string.IsNullOrWhiteSpace(carpeta))
+                        {
+                            cmd.Parameters.AddWithValue("@ruta_destino", carpeta);
+                        }
+
+                        archivo = cmd.ExecuteScalar() as string;
                     }
                 }
 
                 MessageBox.Show(
-                    "Backup realizado correctamente.",
+                    string.IsNullOrWhiteSpace(archivo)
+                        ? "Backup realizado correctamente."
+                        : "Backup realizado correctamente.\n\nArchivo: " + archivo,
                     "Éxito",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information

@@ -8,5 +8,12 @@
             Formato: Data Source=SERVIDOR;Initial Catalog=comercio;User ID=USUARIO;Password=CLAVE
         -->
         <add key="CadenaConexion" value="Data Source=TU_SERVIDOR\SQLEXPRESS;Initial Catalog=comercio;User ID=sa;Password=TU_CLAVE" />
+
+        <!--
+            Carpeta donde se guardan los respaldos (.bak).
+            Vacío = la carpeta de backup por defecto de la instancia de SQL Server.
+            Ejemplo: C:\Final\Backup\
+        -->
+        <add key="CarpetaBackup" value="" />
     </appSettings>
 </configuration>
