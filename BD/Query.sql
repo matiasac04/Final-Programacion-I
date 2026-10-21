@@ -15,6 +15,7 @@ USE [comercio]
 
 GO
 -- ============================ TABLAS ============================
+IF OBJECT_ID('dbo.usuarios', 'U') IS NULL
 CREATE TABLE [dbo].[usuarios](
 	[id_usuario] [int] NOT NULL,
 	[usuario] [nvarchar](15) NULL,
@@ -22,12 +23,14 @@ CREATE TABLE [dbo].[usuarios](
  CONSTRAINT [PK_usuarios] PRIMARY KEY CLUSTERED ([id_usuario] ASC)
 )
 GO
+IF OBJECT_ID('dbo.clientes', 'U') IS NULL
 CREATE TABLE [dbo].[clientes](
 	[id_cliente] [int] NOT NULL,
 	[razon_social] [nvarchar](60) NULL,
  CONSTRAINT [PK_clientes] PRIMARY KEY CLUSTERED ([id_cliente] ASC)
 )
 GO
+IF OBJECT_ID('dbo.productos', 'U') IS NULL
 CREATE TABLE [dbo].[productos](
 	[codigo] [int] NOT NULL,
 	[descripcion] [nvarchar](60) NULL,
@@ -36,6 +39,7 @@ CREATE TABLE [dbo].[productos](
  CONSTRAINT [PK_productos] PRIMARY KEY CLUSTERED ([codigo] ASC)
 )
 GO
+IF OBJECT_ID('dbo.ventas', 'U') IS NULL
 CREATE TABLE [dbo].[ventas](
 	[id_venta] [int] NOT NULL,
 	[fecha] [datetime] NULL,
@@ -45,6 +49,7 @@ CREATE TABLE [dbo].[ventas](
  CONSTRAINT [PK_ventas] PRIMARY KEY CLUSTERED ([id_venta] ASC)
 )
 GO
+IF OBJECT_ID('dbo.detalle_venta', 'U') IS NULL
 CREATE TABLE [dbo].[detalle_venta](
 	[id_venta] [int] NOT NULL,
 	[codigo] [int] NOT NULL,
@@ -54,22 +59,30 @@ CREATE TABLE [dbo].[detalle_venta](
  CONSTRAINT [PK_detalle_venta] PRIMARY KEY CLUSTERED ([id_venta] ASC, [codigo] ASC)
 )
 GO
-ALTER TABLE [dbo].[ventas] ADD CONSTRAINT [FK_ventas_clientes] FOREIGN KEY ([id_cliente]) REFERENCES [dbo].[clientes] ([id_cliente])
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_ventas_clientes')
+    ALTER TABLE [dbo].[ventas] ADD CONSTRAINT [FK_ventas_clientes] FOREIGN KEY ([id_cliente]) REFERENCES [dbo].[clientes] ([id_cliente])
 GO
-ALTER TABLE [dbo].[ventas] ADD CONSTRAINT [FK_ventas_usuarios] FOREIGN KEY ([id_usuario]) REFERENCES [dbo].[usuarios] ([id_usuario])
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_ventas_usuarios')
+    ALTER TABLE [dbo].[ventas] ADD CONSTRAINT [FK_ventas_usuarios] FOREIGN KEY ([id_usuario]) REFERENCES [dbo].[usuarios] ([id_usuario])
 GO
-ALTER TABLE [dbo].[detalle_venta] ADD CONSTRAINT [FK_detalle_venta_ventas] FOREIGN KEY ([id_venta]) REFERENCES [dbo].[ventas] ([id_venta])
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_detalle_venta_ventas')
+    ALTER TABLE [dbo].[detalle_venta] ADD CONSTRAINT [FK_detalle_venta_ventas] FOREIGN KEY ([id_venta]) REFERENCES [dbo].[ventas] ([id_venta])
 GO
-ALTER TABLE [dbo].[detalle_venta] ADD CONSTRAINT [FK_detalle_venta_productos] FOREIGN KEY ([codigo]) REFERENCES [dbo].[productos] ([codigo])
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_detalle_venta_productos')
+    ALTER TABLE [dbo].[detalle_venta] ADD CONSTRAINT [FK_detalle_venta_productos] FOREIGN KEY ([codigo]) REFERENCES [dbo].[productos] ([codigo])
 GO
 
 -- ==================== USUARIOS DE DEMOSTRACION ====================
 -- (psw en texto plano: es un TP academico, no usar asi en produccion)
-INSERT INTO usuarios (id_usuario, usuario, psw) VALUES (1, 'admin', 123), (2, 'Matias', 456)
+IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = 1)
+    INSERT INTO usuarios (id_usuario, usuario, psw) VALUES (1, 'admin', 123)
+GO
+IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = 2)
+    INSERT INTO usuarios (id_usuario, usuario, psw) VALUES (2, 'Matias', 456)
 
 GO
 -- ================ PROCEDIMIENTOS ALMACENADOS ==================
-CREATE PROCEDURE sp_login
+CREATE OR ALTER PROCEDURE sp_login
     @usuario NVARCHAR(50),
     @psw NVARCHAR(50)
 AS
@@ -83,7 +96,7 @@ END
 GO
 
 GO
-create procedure spu_actualizar_venta
+create or alter procedure spu_actualizar_venta
 @id_venta int,
 @id_cliente int,
 @importe decimal(18,2)
@@ -95,7 +108,7 @@ where id_venta = @id_venta
 GO
 
 GO
-CREATE PROCEDURE spu_alta_cliente
+CREATE OR ALTER PROCEDURE spu_alta_cliente
 @id_cliente INT,
 @razon_social NVARCHAR(60)
 AS
@@ -104,7 +117,7 @@ VALUES(@id_cliente, @razon_social)
 GO
 
 GO
-CREATE PROCEDURE spu_alta_productos
+CREATE OR ALTER PROCEDURE spu_alta_productos
 @codigo INT,
 @descripcion NVARCHAR(60),
 @stock INT,
@@ -115,7 +128,7 @@ VALUES(@codigo, @descripcion, @stock, @precio)
 GO
 
 GO
-create procedure spu_alta_venta
+create or alter procedure spu_alta_venta
 @id_venta int,
 @fecha datetime,
 @id_cliente int,
@@ -127,7 +140,7 @@ values(@id_venta, @fecha, @id_cliente, @importe, @id_usuario)
 GO
 
 GO
-CREATE PROCEDURE [dbo].[spu_backup]
+CREATE OR ALTER PROCEDURE [dbo].[spu_backup]
     @ruta_destino NVARCHAR(500) = NULL
 AS
 BEGIN
@@ -173,7 +186,7 @@ END
 GO
 
 GO
-CREATE PROCEDURE spu_baja_cliente
+CREATE OR ALTER PROCEDURE spu_baja_cliente
 @id_cliente INT
 as
 DELETE FROM clientes
@@ -181,14 +194,14 @@ WHERE id_cliente = @id_cliente
 GO
 
 GO
-CREATE PROCEDURE spu_baja_productos
+CREATE OR ALTER PROCEDURE spu_baja_productos
 @codigo INT
 AS
 DELETE FROM productos WHERE codigo = @codigo
 GO
 
 GO
-CREATE PROCEDURE spu_cargar_detalleventa
+CREATE OR ALTER PROCEDURE spu_cargar_detalleventa
 @id_venta INT,
 @codigo INT,
 @precio DECIMAL,
@@ -200,7 +213,7 @@ VALUES(@id_venta, @codigo, @precio, @cant, @precio_r);
 GO
 
 GO
-CREATE PROCEDURE spu_eliminar_detalles_por_venta
+CREATE OR ALTER PROCEDURE spu_eliminar_detalles_por_venta
     @id_venta INT
 AS
 BEGIN
@@ -210,7 +223,7 @@ END
 GO
 
 GO
-CREATE PROCEDURE spu_eliminar_detalleventa
+CREATE OR ALTER PROCEDURE spu_eliminar_detalleventa
   @id_venta INT,
     @codigo INT
 AS
@@ -219,14 +232,14 @@ AS
 GO
 
 GO
-CREATE PROCEDURE spu_eliminar_venta
+CREATE OR ALTER PROCEDURE spu_eliminar_venta
 @id_venta INT
 as
 DELETE FROM ventas where id_venta = @id_venta
 GO
 
 GO
-create procedure spu_id_nueva_cliente
+create or alter procedure spu_id_nueva_cliente
 as
 declare @id_cliente int;
 SELECT @id_cliente = ISNULL(MAX(id_cliente), 0) + 1 FROM clientes;
@@ -234,7 +247,7 @@ SELECT @id_cliente AS nuevo_id_cliente;
 GO
 
 GO
-create procedure spu_id_nueva_producto
+create or alter procedure spu_id_nueva_producto
 as
 declare @codigo int;
 SELECT @codigo = ISNULL(MAX(codigo), 0) + 1 FROM productos;
@@ -242,7 +255,7 @@ SELECT @codigo AS nuevo_id_producto;
 GO
 
 GO
-create procedure spu_id_nueva_venta
+create or alter procedure spu_id_nueva_venta
 as
 declare @id_venta int;
 SELECT @id_venta = ISNULL(MAX(id_venta), 0) + 1 FROM ventas;
@@ -250,7 +263,7 @@ SELECT @id_venta AS nuevo_id_venta;
 GO
 
 GO
-CREATE PROCEDURE spu_modificar_cliente
+CREATE OR ALTER PROCEDURE spu_modificar_cliente
 @id_cliente INT,
 @razon_social NVARCHAR(60)
 AS
@@ -258,7 +271,7 @@ UPDATE clientes SET razon_social = @razon_social WHERE id_cliente = @id_cliente
 GO
 
 GO
-CREATE PROCEDURE spu_modificar_productos
+CREATE OR ALTER PROCEDURE spu_modificar_productos
 @codigo INT,
 @descripcion NVARCHAR(60),
 @stock INT,
@@ -272,7 +285,7 @@ WHERE codigo = @codigo;
 GO
 
 GO
-CREATE PROCEDURE spu_modificar_venta
+CREATE OR ALTER PROCEDURE spu_modificar_venta
 @id_venta INT,
 @fecha DATETIME,
 @id_cliente INT,
@@ -288,13 +301,13 @@ where id_venta= @id_venta
 GO
 
 GO
-create procedure spu_mostrar_cliente
+create or alter procedure spu_mostrar_cliente
 as
 select*from clientes
 GO
 
 GO
-CREATE procedure [dbo].[spu_mostrar_detalle_venta]
+CREATE OR ALTER PROCEDURE [dbo].[spu_mostrar_detalle_venta]
 @id_venta INT
 AS
 BEGIN
@@ -305,7 +318,7 @@ END
 GO
 
 GO
-CREATE PROCEDURE spu_mostrar_productos
+CREATE OR ALTER PROCEDURE spu_mostrar_productos
 AS
 BEGIN
     SELECT * FROM productos
@@ -313,14 +326,14 @@ END
 GO
 
 GO
-create procedure spu_mostrar_venta
+create or alter procedure spu_mostrar_venta
 as
 select*from ventas
 GO
 
 GO
 -- =========================== TRIGGERS ===========================
-create trigger baja_stock on detalle_venta
+create or alter trigger baja_stock on detalle_venta
 for insert
 as
  UPDATE p
@@ -330,7 +343,7 @@ as
 GO
 
 GO
-create trigger sube_stock on detalle_venta
+create or alter trigger sube_stock on detalle_venta
 for delete
 as
  UPDATE p

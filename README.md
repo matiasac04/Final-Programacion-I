@@ -1,7 +1,6 @@
 ﻿# sys_comercio
 
-Sistema de comercio en **C# WinForms (.NET Framework 4.8)** con **SQL Server** y la librería
-de interfaz **Guna.UI2**.
+Sistema de comercio en **C# WinForms (.NET Framework 4.8)** con **SQL Server**.
 
 Permite administrar clientes y productos, registrar ventas con su detalle y bajar/subir el
 stock automáticamente según se cargan o eliminan líneas de venta.
@@ -38,6 +37,10 @@ BD/comercio_log.ldf          Log de la base adjunta
 Abrí **SQL Server Management Studio** y corré el script `BD/Query.sql`. Crea la base
 `comercio` con sus tablas, procedimientos almacenados y triggers.
 
+El script se puede volver a correr las veces que quieras: no borra los datos que ya
+están cargados (las tablas se crean solo si no existen y los procedimientos se
+actualizan con `CREATE OR ALTER`).
+
 > También podés usar los archivos `BD/comercio.mdf` y `BD/comercio_log.ldf` (base adjunta)
 > en lugar de correr el script.
 
@@ -70,7 +73,7 @@ Además, en el mismo `App.config.local` se puede indicar dónde se guardan los r
 Si se deja vacía, los `.bak` van a la carpeta de backup por defecto de la instancia de
 SQL Server. La app muestra la ruta del archivo generado al terminar el respaldo.
 
-### 4. Compilar y ejecutar
+### 3. Compilar y ejecutar
 
 `F5` desde Visual Studio, o:
 
