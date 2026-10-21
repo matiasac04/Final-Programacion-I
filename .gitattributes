@@ -1,0 +1,16 @@
+* text=auto
+
+*.cs      text diff=csharp
+*.csproj  text
+*.sln     text
+*.config  text
+*.sql     text
+*.md      text
+
+*.mdf     binary
+*.ldf     binary
+*.resx    text
+*.ico     binary
+*.png     binary
+*.exe     binary
+*.dll     binary

@@ -1,0 +1,31 @@
+# ── Visual Studio ──────────────────────────────────────────────
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vscode/
+
+# ── Compilación ────────────────────────────────────────────────
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.pdb
+*.dll.config
+
+# ── NuGet ──────────────────────────────────────────────────────
+# Las carpetas de paquetes se regeneran con: nuget restore sys_comercio.sln
+packages/
+*.nupkg
+
+# ── Configuración local ────────────────────────────────────────
+# App.config.local tiene la cadena de conexión CON la clave de cada máquina.
+# Nunca se versiona: se copia desde App.config.local.example.
+App.config.local
+
+# ── Sistema ────────────────────────────────────────────────────
+Thumbs.db
+Desktop.ini
+*.tmp

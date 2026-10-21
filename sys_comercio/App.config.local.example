@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <appSettings>
+        <!--
+            Cadena de conexión REAL de esta máquina.
+            Copiá este archivo como 'App.config.local', completá los datos y
+            NO lo subas al repo (ya está en el .gitignore).
+            Formato: Data Source=SERVIDOR;Initial Catalog=comercio;User ID=USUARIO;Password=CLAVE
+        -->
+        <add key="CadenaConexion" value="Data Source=TU_SERVIDOR\SQLEXPRESS;Initial Catalog=comercio;User ID=sa;Password=TU_CLAVE" />
+    </appSettings>
+</configuration>
